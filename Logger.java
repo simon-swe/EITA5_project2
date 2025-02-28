@@ -9,9 +9,10 @@ public class Logger {
  * The log will be saved in a file
  * The log will contain the username of the user that accessed the file, a timestamp and what action was taken
  */
+    private static Logger instance;
     private FileWriter file;
     private BufferedWriter buffer;
-    public Logger() {
+    private Logger() {
         try {
             file = new FileWriter("log.txt",true);
         } catch (IOException e) {
@@ -19,6 +20,14 @@ public class Logger {
             e.printStackTrace();
         }
         buffer = new BufferedWriter(file);
+    }
+
+    //To prevent multiple loggers
+    public static synchronized Logger getInstance() {
+        if (instance == null) {
+            instance = new Logger();
+        }
+        return instance;
     }
 
     public String constructMessage(String username,String role ,String change) {
