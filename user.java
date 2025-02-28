@@ -15,12 +15,14 @@ public class user {
     private String type;
     private String department;
     private int access;
+    private Logger logger;
 
     public user(String username, String password, String type, String department){
         this.username = username;
         this.password = password;
         this.type = type;
         this.department = department;
+        logger = Logger.getInstance();
     }
     public String getUsername(){
         return this.username;
@@ -67,6 +69,8 @@ public class user {
     public void readFiles(){
         if(access == 0 || access == 1 || access == 2 || access == 3){
         System.out.println("Permission to read files granted");
+        logger.log(username,type,"READ FILE");
+        logger.closeLog();
         }
         else{
             System.out.println("Read access denied");
