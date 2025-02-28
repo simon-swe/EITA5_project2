@@ -1,4 +1,3 @@
-package hospital;
 public class LoggerTest {
     public static void main(String[] args) {
         Logger l = new Logger();

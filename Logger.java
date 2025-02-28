@@ -1,4 +1,3 @@
-package hospital;
 import java.time.LocalDateTime;
 import java.io.BufferedWriter;
 import java.io.FileWriter;
