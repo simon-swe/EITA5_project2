@@ -13,7 +13,7 @@ public class Logger {
     BufferedWriter buffer;
     public Logger() {
         try {
-            file = new FileWriter("hospital/log.txt",true);
+            file = new FileWriter("log.txt",true);
         } catch (IOException e) {
             System.out.println("Could not find file");
             e.printStackTrace();
