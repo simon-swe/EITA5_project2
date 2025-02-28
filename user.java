@@ -14,12 +14,14 @@ public class user {
     private String type;
     private String department;
     private int access;
+    private Logger logger;
 
     public user(String username, String password, String type, String department){
         this.username = username;
         this.password = password;
         this.type = type;
         this.department = department;
+        logger = Logger.getInstance();
     }
     public String getUsername(){
         return this.username;
@@ -75,4 +77,37 @@ public class user {
             System.out.println("Invalid user type");
         }
     }
+    public void readFiles(){
+        if(access == 0 || access == 1 || access == 2 || access == 3){
+        System.out.println("Permission to read files granted");
+        logger.log(username,type,"READ FILE");
+        logger.closeLog();
+        }
+        else{
+            System.out.println("Read access denied");
+        }
+    }
+    public void writeFiles(){
+        if(access == 0 || access == 1 || access == 2){
+            System.out.println("Permission to write files granted");
+        }        else{
+            System.out.println("Access denied");
+        }
+    }
+    public void createFiles(){
+        if(access == 1){
+            System.out.println("Permission to create files granted");
+        }
+        else{
+            System.out.println("Access denied");
+        }
+    }
+    public void deleteFiles(){
+        if(access == 0){
+            System.out.println("Permission to delete files granted");
+        }
+        else{
+            System.out.println("Access denied");
+        }
+    }  
 }

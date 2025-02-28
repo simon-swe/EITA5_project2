@@ -26,7 +26,8 @@ public class client {
       System.exit(-1);
     }
     try { /* get input parameters */
-      if (args.length == 1) port = Integer.parseInt(args[0]);
+      if (args.length == 1)
+        port = Integer.parseInt(args[0]);
       else {
         host = args[0];
         port = Integer.parseInt(args[1]);
@@ -46,9 +47,9 @@ public class client {
         TrustManagerFactory tmf = TrustManagerFactory.getInstance("SunX509");
         SSLContext ctx = SSLContext.getInstance("TLSv1.2");
         // keystore password (storepass)
-        ks.load(new FileInputStream("clientkeystore"), password);  
+        ks.load(new FileInputStream("clientkeystore"), password);
         // truststore password (storepass);
-        ts.load(new FileInputStream("clienttruststore"), password); 
+        ts.load(new FileInputStream("clienttruststore"), password);
         kmf.init(ks, password); // user password (keypass)
         tmf.init(ts); // keystore can be used as truststore here
         ctx.init(kmf.getKeyManagers(), tmf.getTrustManagers(), null);
@@ -56,7 +57,7 @@ public class client {
       } catch (Exception e) {
         throw new IOException(e.getMessage());
       }
-      SSLSocket socket = (SSLSocket)factory.createSocket(host, port);
+      SSLSocket socket = (SSLSocket) factory.createSocket(host, port);
       System.out.println("\nsocket before handshake:\n" + socket + "\n");
 
       /*
@@ -70,9 +71,10 @@ public class client {
       SSLSession session = socket.getSession();
       Certificate[] cert = session.getPeerCertificates();
       String subject = ((X509Certificate) cert[0]).getSubjectX500Principal().getName();
-      String issuer  = ((X509Certificate) cert[0]).getIssuerX500Principal().getName();
-      String serial =  ((X509Certificate)  cert[0]).getSerialNumber().toString();
-      System.out.println("certificate name (subject DN field) on certificate received from server:\n" + subject + "\n" + issuer + "\n" + serial + "\n");
+      String issuer = ((X509Certificate) cert[0]).getIssuerX500Principal().getName();
+      String serial = ((X509Certificate) cert[0]).getSerialNumber().toString();
+      System.out.println("certificate name (subject DN field) on certificate received from server:\n" + subject + "\n"
+          + issuer + "\n" + serial + "\n");
       System.out.println("socket after handshake:\n" + socket + "\n");
       System.out.println("secure connection established\n\n");
 
