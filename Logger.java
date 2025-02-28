@@ -9,8 +9,8 @@ public class Logger {
  * The log will be saved in a file
  * The log will contain the username of the user that accessed the file, a timestamp and what action was taken
  */
-    FileWriter file;
-    BufferedWriter buffer;
+    private FileWriter file;
+    private BufferedWriter buffer;
     public Logger() {
         try {
             file = new FileWriter("log.txt",true);
