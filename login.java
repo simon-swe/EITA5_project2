@@ -4,6 +4,8 @@ import java.io.IOException;
 import java.util.Scanner;
 
 public class login {
+    public static boolean SSLConnections
+
     /*
      * Handles the login of the user
      * The user will enter their username and password
