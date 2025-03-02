@@ -3,7 +3,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.Scanner;
 
-public class Login {
+public class login {
     public static boolean SSLConnections;
 
     /*
