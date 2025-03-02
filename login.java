@@ -43,8 +43,10 @@ public class Login {
         }
         return false;
     }
+    
 
 }
+
 // after check send username password, type, and department to user.java
 // to grant permissions
 // ask user.java if username and password exist in user.txt, then check CA
