@@ -15,8 +15,9 @@ public class login {
      * If the username and password and certificate are correct the user will be
      * logged in
      */
+    private String userName, password, storedUser, storedPass, type, department;
+
     public boolean authenticate() {
-        String userName, password;
 
         try (Scanner input = new Scanner(System.in)) {
             System.out.println("Enter Username: ");
@@ -53,7 +54,19 @@ public class login {
         return false;
     }
 
+    public String returnUser() {
+        return userName;
+    }
+
+    public String returnType() {
+        return type;
+    }
+
+    public String returnDepartment() {
+        return department;
+    }
 }
+
 // after check send username password, type, and department to user.java
 // to grant permissions
 // ask user.java if username and password exist in user.txt, then check CA
