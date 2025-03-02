@@ -32,6 +32,8 @@ public class login {
             while (reader.hasNext()) {
                 String storedUser = reader.next();
                 String storedPass = reader.next();
+                String type = reader.next();
+                String department = reader.next();
                 if (storedUser.equals(userName) && storedPass.equals(password)) {
                     login = true;
                     break;
