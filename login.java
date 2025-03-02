@@ -3,8 +3,8 @@ import java.io.File;
 import java.io.IOException;
 import java.util.Scanner;
 
-public class login {
-    public static boolean SSLConnections
+public class Login {
+    public static boolean SSLConnections;
 
     /*
      * Handles the login of the user
