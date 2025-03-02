@@ -2,6 +2,7 @@ import java.net.*;
 import java.io.*;
 import javax.net.ssl.*;
 import java.security.cert.X509Certificate;
+import java.util.jar.Attributes.Name;
 import java.security.KeyStore;
 import java.security.cert.*;
 
@@ -18,6 +19,7 @@ public class client {
   public static void main(String[] args) throws Exception {
     String host = null;
     int port = -1;
+    String name = null;
     for (int i = 0; i < args.length; i++) {
       System.out.println("args[" + i + "] = " + args[i]);
     }
@@ -28,9 +30,14 @@ public class client {
     try { /* get input parameters */
       if (args.length == 1)
         port = Integer.parseInt(args[0]);
+      else if(args.length == 2) {
+        host = args[0];
+        port = Integer.parseInt(args[1]);
+      }
       else {
         host = args[0];
         port = Integer.parseInt(args[1]);
+        name = args[2];
       }
     } catch (IllegalArgumentException e) {
       System.out.println("USAGE: java client [host] port");
@@ -47,9 +54,9 @@ public class client {
         TrustManagerFactory tmf = TrustManagerFactory.getInstance("SunX509");
         SSLContext ctx = SSLContext.getInstance("TLSv1.2");
         // keystore password (storepass)
-        ks.load(new FileInputStream("clientkeystore"), password);
+        ks.load(new FileInputStream("TLS_Users/"+name+"clientkeystore"), password);
         // truststore password (storepass);
-        ts.load(new FileInputStream("clienttruststore"), password);
+        ts.load(new FileInputStream("TLS_Users/"+name+"clienttruststore"), password);
         kmf.init(ks, password); // user password (keypass)
         tmf.init(ts); // keystore can be used as truststore here
         ctx.init(kmf.getKeyManagers(), tmf.getTrustManagers(), null);
