@@ -4,7 +4,7 @@ import java.io.IOException;
 import java.util.Scanner;
 
 public class login {
-    public static boolean SSLConnections
+    public static boolean SSLConnections;
 
     /*
      * Handles the login of the user
@@ -28,14 +28,23 @@ public class login {
 
         try (Scanner reader = new Scanner(new File("users.txt"))) {
             reader.useDelimiter(",");
-            while (reader.hasNext()) {
-                String storedUser = reader.next();
-                String storedPass = reader.next();
-                String type = reader.next();
-                String department = reader.next();
-                if (storedUser.equals(userName) && storedPass.equals(password)) {
-                    return true;
+            while (reader.hasNextLine()) {
+                if (reader.hasNext()) {
+                    String storedUser = reader.next();
+                    if (reader.hasNext()) {
+                        String storedPass = reader.next();
+                        if (reader.hasNext()) {
+                            String type = reader.next();
+                            if (reader.hasNext()) {
+                                String department = reader.next();
+                                if (storedUser.equals(userName) && storedPass.equals(password)) {
+                                    return true;
+                                }
+                            }
+                        }
+                    }
                 }
+
             }
         } catch (IOException e) {
             System.err.println("An error occurred while reading the file.");

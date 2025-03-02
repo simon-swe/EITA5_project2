@@ -1,7 +1,7 @@
 public class main_to_connect {
 
     public static void main(String[] args) {
-        Login login = new Login();
+        login login = new login();
         if (login.authenticate()) {
             System.out.println("Login successful!");
 
