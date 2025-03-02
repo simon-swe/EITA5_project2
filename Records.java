@@ -20,6 +20,7 @@ public class Records {
         this.user = user;
         this.department = user.getDepartment();
         this.access = user.getAccess();  
+        logger = Logger.getInstance();
     }
 
     //Gets the record for a patient
