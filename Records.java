@@ -14,12 +14,14 @@ public class Records {
     private user user;
     private String department;
     private int access;
+    private Logger logger;
 
     public Records(user user){
         this.user = user;
         this.department = user.getDepartment();
         this.access = user.getAccess();
         permissions(access);
+        logger = Logger.getInstance();
         
     }
 
@@ -27,15 +29,18 @@ public class Records {
     public File getRecord(String patient){
         if ((access == 3) && (patient != user.getUsername()) || ((access == 2 || access == 1) && (department != user.getDepartment()))){
             System.out.println("You do not have permission to access this record");
+            logger.log(user.getUsername(),user.getType(),"ATTEMPT TO ACCESS UNAUTHORIZED RECORD");
             return null;
         }
         File record = new File(patient + ".txt");
         this.record = record;
         if(record.exists()){
+            logger.log(user.getUsername(),user.getType(),"ACCESS RECORD SUCCESSFUL");
             return record;
         }
         else{
             System.out.println("Record does not exist");
+            logger.log(user.getUsername(),user.getType(),"ATTEMPT TO ACCESS NONEXISTIENT RECORD");
             return null;
         }
     }
@@ -48,6 +53,7 @@ public class Records {
                 this.writer = new PrintWriter(new FileWriter(record));
                 writer.println("Patient: " + patient + "Doctor: " + doctor + "Nurse: " + nurse + "Department: " + department);
                 addMedicalData();
+                logger.log(user.getUsername(), user.getType(), "CREATED NEW RECORD");
             }
             catch(IOException e){
                 System.out.println("Error creating record");
@@ -55,6 +61,7 @@ public class Records {
         }
         else{
             System.out.println("You do not have permission to create a record");
+            logger.log(user.getUsername(),user.getType(),"UNAUTHORIZED ATTEMPT TO CREATE PASSWORD");
         }
         
     }
@@ -68,6 +75,7 @@ public class Records {
         System.out.println("Enter new medical data: ");
         String data = reader.nextLine();
         writer.println(data);
+        logger.log(user.getUsername(),user.getType(),"MEDICAL DATA ADDED TO RECORD");
     }
 
     //Deletes a record for a patient
@@ -77,13 +85,16 @@ public class Records {
         if(access == 0){
             if(record.exists()){
                 record.delete();
+                logger.log(user.getUsername(),user.getType(),"RECORD DELETED");
             }
             else{
                 System.out.println("Record does not exist");
+                logger.log(user.getUsername(),user.getType(),"ATTEMPT TO RECORD NONEXISTENT RECORD");
             }
         }
         else{
             System.out.println("You do not have permission to delete the record");
+            logger.log(user.getUsername(), user.getType(), "UNAUTHORIZED ATTEMPT TO DELETE RECORD");
         }
     }
 
