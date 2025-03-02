@@ -10,25 +10,21 @@
 */
 public class user {
     private String username;
-    private String password;
     private String type;
     private String department;
     private int access;
     private Logger logger;
 
-    public user(String username, String password, String type, String department){
+    public user(String username, String type, String department){
         this.username = username;
-        this.password = password;
         this.type = type;
         this.department = department;
         logger = Logger.getInstance();
+        this.access = userType();
     }
     public String getUsername(){
         return this.username;
     } 
-    public String getPassword(){
-        return this.password;
-    }
     public String getType(){
         return this.type;
     }
@@ -43,71 +39,39 @@ public class user {
      *Nurse has access to read and write files, access level 2
      *Patient has access to read files, access level 3
      *Government has access to read and delete files, access level 0*/
-    public void userType(){
+    private int userType(){
         if(this.type.equals("Government")){
-            this.access = 0;
             System.out.println("Permission to read files granted");
             System.out.println("Read access denied");
             System.out.println("Create access denied");
             System.out.println("Write access denied");
-            System.out.println("Permission to delete files granted"); 
+            System.out.println("Permission to delete files granted");
+            return 0;
         }
         else if(this.type.equals("Doctor")){
-            this.access = 1;
             System.out.println("Permission to read files granted");
             System.out.println("Permission to write files granted");
             System.out.println("Permission to create files granted");
             System.out.println("Delete access denied");
+            return 1;
         }
         else if(this.type.equals("Nurse")){
-            this.access = 2;
             System.out.println("Permission to read files granted");
             System.out.println("Permission to write files granted");
             System.out.println("Create access denied");
             System.out.println("Delete access denied");
+            return 2;
         }
         else if(this.type.equals("Patient")){
-            this.access = 3;
             System.out.println("Permission to read files granted");
             System.out.println("Write access denied");
             System.out.println("Create access denied");
             System.out.println("Delete access denied");
+            return 3;
         }
         else{
             System.out.println("Invalid user type");
+            return -1;
         }
     }
-    public void readFiles(){
-        if(access == 0 || access == 1 || access == 2 || access == 3){
-        System.out.println("Permission to read files granted");
-        logger.log(username,type,"READ FILE");
-        logger.closeLog();
-        }
-        else{
-            System.out.println("Read access denied");
-        }
-    }
-    public void writeFiles(){
-        if(access == 0 || access == 1 || access == 2){
-            System.out.println("Permission to write files granted");
-        }        else{
-            System.out.println("Access denied");
-        }
-    }
-    public void createFiles(){
-        if(access == 1){
-            System.out.println("Permission to create files granted");
-        }
-        else{
-            System.out.println("Access denied");
-        }
-    }
-    public void deleteFiles(){
-        if(access == 0){
-            System.out.println("Permission to delete files granted");
-        }
-        else{
-            System.out.println("Access denied");
-        }
-    }  
 }
