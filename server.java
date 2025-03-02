@@ -33,15 +33,17 @@ public class server implements Runnable {
       BufferedReader in = null;
       out = new PrintWriter(socket.getOutputStream(), true);
       in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
-
+      
       String clientMsg = null;
       while ((clientMsg = in.readLine()) != null) {
+        
         String rev = new StringBuilder(clientMsg).reverse().toString();
         System.out.println("received '" + clientMsg + "' from client");
         System.out.print("sending '" + rev + "' to client...");
         out.println(rev);
         out.flush();
         System.out.println("done\n");
+
       }
       in.close();
       out.close();
