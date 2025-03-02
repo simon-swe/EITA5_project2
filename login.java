@@ -1,5 +1,4 @@
 import java.io.File;
-//import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.Scanner;
 
@@ -31,13 +30,13 @@ public class login {
             reader.useDelimiter(",");
             while (reader.hasNextLine()) {
                 if (reader.hasNext()) {
-                    String storedUser = reader.next();
+                    storedUser = reader.next();
                     if (reader.hasNext()) {
-                        String storedPass = reader.next();
+                        storedPass = reader.next();
                         if (reader.hasNext()) {
-                            String type = reader.next();
+                            type = reader.next();
                             if (reader.hasNext()) {
-                                String department = reader.next();
+                                department = reader.next();
                                 if (storedUser.equals(userName) && storedPass.equals(password)) {
                                     return true;
                                 }
