@@ -13,21 +13,18 @@ public class login {
      * If the username and password and certificate are correct the user will be
      * logged in
      */
-    public static void main(String[] args) {
+    public boolean authenticate() {
         String userName, password;
 
-        Scanner input = new Scanner(System.in);
+        try (Scanner input = new Scanner(System.in)) {
+            System.out.println("Enter Username: ");
+            userName = input.nextLine();
+            System.out.println("Enter Password: ");
+            password = input.nextLine();
 
-        System.out.println("Enter Username: ");
-        userName = input.nextLine();
-        System.out.println("Enter Password: ");
-        password = input.nextLine();
-        input.close();
+        }
 
-        try {
-            File loginObj = new File("users.txt");
-            Scanner reader = new Scanner(loginObj);
-            boolean login = false;
+        try (Scanner reader = new Scanner(new File("users.txt"))) {
             reader.useDelimiter(",");
             while (reader.hasNext()) {
                 String storedUser = reader.next();
@@ -35,21 +32,16 @@ public class login {
                 String type = reader.next();
                 String department = reader.next();
                 if (storedUser.equals(userName) && storedPass.equals(password)) {
-                    login = true;
-                    break;
+                    return true;
                 }
-                if (!reader.hasNext()) {
-                    System.out.println("Wrong username or password");
-                }
-
             }
-            reader.close();
-
         } catch (IOException e) {
+            System.err.println("An error occurred while reading the file.");
             e.printStackTrace();
         }
-
+        return false;
     }
+
 }
 // after check send username password, type, and department to user.java
 // to grant permissions
