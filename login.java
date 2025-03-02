@@ -16,7 +16,11 @@ public class login {
      * logged in
      */
     private String userName, password, storedUser, storedPass, type, department;
+    private Logger logger;
 
+    public login() {
+        logger = Logger.getInstance();
+    }
     public boolean authenticate() {
 
         try (Scanner input = new Scanner(System.in)) {
@@ -39,6 +43,8 @@ public class login {
                             if (reader.hasNext()) {
                                 String department = reader.next();
                                 if (storedUser.equals(userName) && storedPass.equals(password)) {
+                                    logger.log(storedUser, type, "SUCCESSFULLY LOGGED IN");
+                                    logger.closeLog();
                                     return true;
                                 }
                             }
