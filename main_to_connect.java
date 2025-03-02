@@ -17,8 +17,8 @@ public class main_to_connect {
         System.out.println("1. Get a record");
         System.out.println("2. Create a record");
         System.out.println("3. Delete a record");
-
-        int choice = input.nextInt();
+        String c = input.nextLine();
+        int choice = Integer.parseInt(c);
         if(choice == 1){
             System.out.println("Enter the patient name: ");
             String patient = input.next();
