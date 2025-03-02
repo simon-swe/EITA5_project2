@@ -71,7 +71,9 @@ public class Records {
     }
 
     //Deletes a record for a patient
-    public void deleteRecord(){
+    public void deleteRecord(String patient){
+        File record = new File(patient + ".txt");
+
         if(access == 0){
             if(record.exists()){
                 record.delete();
