@@ -4,17 +4,14 @@ import java.io.PrintWriter;
 public class main_to_connect {
     private PrintWriter out;
     private BufferedReader in;
-    private user user;
-    private Records records;
+    private Access access;
 
-    public main_to_connect (PrintWriter out, BufferedReader in, user userA) {
+    public main_to_connect (PrintWriter out, BufferedReader in, Access access){ {
+        try {
         this.out = out;
         this.in = in;
-        this.user = userA;
-        records = new Records(user);
-    }    
-
-    public void program() {
+        this.access = access;
+        Records records = new Records(access);
         System.out.println("What would you like to do?");
         System.out.println("1. Get a record");
         System.out.println("2. Create a record");
