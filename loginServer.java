@@ -5,6 +5,10 @@ import java.util.Scanner;
 
 public class loginServer {
     private String userName;
+    private Access access;
+    public loginServer() {
+
+    }
     public boolean login(PrintWriter out, BufferedReader in) {
         for (int i = 0; i < 3; i++) { // Allow up to 3 attempts
             try {
@@ -30,7 +34,7 @@ public class loginServer {
         return false;
     }
 
-    public static boolean authenticate(String userName, String password) {
+    public boolean authenticate(String userName, String password) {
         try (Scanner reader = new Scanner(new File("users.txt"))) {
             reader.useDelimiter(",");
             while (reader.hasNextLine()) {
@@ -45,6 +49,7 @@ public class loginServer {
                     if (storedUser.equals(userName) && storedPass.equals(password)) {
                         long lastFailedLogin = Long.parseLong(credentials[4].trim());
                         if((System.currentTimeMillis() - lastFailedLogin) > 100000){
+                            createAccess(credentials);
                             return true;
                         }
                         return false; // Authentication success
@@ -89,5 +94,14 @@ public class loginServer {
         } catch (IOException e) {
             System.err.println("Error writing to file: " + e.getMessage());
         }
+    }
+
+    public void createAccess(String[] credentials){
+        access = new Access(credentials[0],credentials[2],credentials[3]);
+        System.out.println(credentials[2]);
+    }
+
+    public Access getAccess() {
+        return access;
     }
 }
