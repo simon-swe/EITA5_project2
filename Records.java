@@ -11,12 +11,12 @@ public class Records {
     private File record;
     private PrintWriter writer;
     private Scanner reader;
-    private user user;
+    private Access user;
     private String department;
     private int access;
     private Logger logger;
 
-    public Records(user user){
+    public Records(Access user){
         this.user = user;
         this.department = user.getDepartment();
         this.access = user.getAccess();  
