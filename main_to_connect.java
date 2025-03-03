@@ -5,45 +5,51 @@ public class main_to_connect {
     private PrintWriter out;
     private BufferedReader in;
     private user user;
+    private Records records;
 
-    public main_to_connect (PrintWriter out, BufferedReader in, user userA){ {
-        try {
+    public main_to_connect (PrintWriter out, BufferedReader in, user userA) {
         this.out = out;
         this.in = in;
         this.user = userA;
-        Records records = new Records(user);
+        records = new Records(user);
+    }    
+
+    public void program() {
         System.out.println("What would you like to do?");
         System.out.println("1. Get a record");
         System.out.println("2. Create a record");
         System.out.println("3. Delete a record");
-        String c = in.readLine();
-        int choice = Integer.parseInt(c);
-        if(choice == 1){
-            System.out.println("Enter the patient name: ");
-            String patient = in.readLine();
-            records.getRecord(patient);
-        }
-        else if (choice == 2){
-            System.out.println("Enter the patient name: ");
-            String patient = in.readLine();
-            System.out.println("Enter the doctor name: ");
-            String doctor = in.readLine();
-            System.out.println("Enter the nurse name: ");
-            String nurse = in.readLine();
-            System.out.println("Enter the department: ");
-            String department = in.readLine();
-            records.createRecord(patient, doctor, nurse, department);
-        }
-        else if (choice == 3){
-            System.out.println("Enter the patient name: ");
-            String patient = in.readLine();
-            records.deleteRecord(patient);
-        }
-        else{
-            System.out.println("Invalid choice");
-        }
+        try {
+            String c = in.readLine();
+            int choice = Integer.parseInt(c);
+            if(choice == 1){
+                System.out.println("Enter the patient name: ");
+                String patient = in.readLine();
+                records.getRecord(patient);
+            }
+            else if (choice == 2){
+                System.out.println("Enter the patient name: ");
+                String patient = in.readLine();
+                System.out.println("Enter the doctor name: ");
+                String doctor = in.readLine();
+                System.out.println("Enter the nurse name: ");
+                String nurse = in.readLine();
+                System.out.println("Enter the department: ");
+                String department = in.readLine();
+                records.createRecord(patient, doctor, nurse, department);
+            }
+            else if (choice == 3){
+                System.out.println("Enter the patient name: ");
+                String patient = in.readLine();
+                records.deleteRecord(patient);
+            }
+            else{
+                System.out.println("Invalid choice");
+            }
         } catch (Exception e) {
+            System.out.println("Exception while entering String");
         }
-    }    
-}
+        
+    }
+
 }
