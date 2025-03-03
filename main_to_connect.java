@@ -6,8 +6,8 @@ public class main_to_connect {
     private BufferedReader in;
     private Access access;
 
-    public main_to_connect (PrintWriter out, BufferedReader in, Access access){ {
-        try {
+    public main_to_connect (PrintWriter out, BufferedReader in, Access access){
+        try{
         this.out = out;
         this.in = in;
         this.access = access;
@@ -46,7 +46,7 @@ public class main_to_connect {
         } catch (Exception e) {
             System.out.println("Exception while entering String");
         }
-        
-    }
 
-}
+        }
+
+    }
