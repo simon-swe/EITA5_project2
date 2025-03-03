@@ -3,7 +3,7 @@ Henrik,heart1,Doctor,Heart,0
 Daniel,lungs2,Nurse,Lungs,0
 Oliver,heart2,Patient,Heart,0
 Adam,data1,Nurse,Lungs,0
-Alice,dat2,Patient,Lungs,0
+Alice,dat2,Patient,Lungs,1
 Elsa,fatal2,Government,nA,0
 Per,fatal3,Government,nA,0
 

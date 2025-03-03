@@ -114,40 +114,29 @@ public class client {
       }
       
       // --- MAIN MESSAGE LOOP (non-blocking polling) ---
-      for (;;) {
-        // Check for any available messages/prompts from the server
-        while (in.ready()) {
-          String serverMsg = in.readLine();
-          if (serverMsg != null) {
-            System.out.println(serverMsg);
-          }
-        }
-        // Check if there's any user input
-        if (read.ready()) {
-          System.out.print(">");
-          String msg = read.readLine();
-          if (msg.equalsIgnoreCase("quit")) {
+      while (true) {
+        // Blocking call: Wait for a message from the server.
+        String serverMsg = in.readLine();
+        if (serverMsg == null) { // Connection closed
             break;
-          }
-          System.out.print("sending '" + msg + "' to server...");
-          out.println(msg);
-          out.flush();
-          System.out.println("done");
-          
-          // Optionally, immediately check for any responses from the server
-          while (in.ready()) {
-            String response = in.readLine();
-            if (response != null) {
-              System.out.println("received '" + response + "' from server\n");
-            }
-          }
         }
-        
-        // Small delay to avoid busy looping if no input is available.
-        try {
-          Thread.sleep(50);
-        } catch (InterruptedException e) {
-          // Handle the exception if necessary
+        System.out.println(serverMsg);
+    
+        // Blocking call: Wait for user input.
+        System.out.print(">");
+        String msg = read.readLine();
+        if (msg == null || msg.equalsIgnoreCase("quit")) {
+            break;
+        }
+        System.out.print("sending '" + msg + "' to server...");
+        out.println(msg);
+        out.flush();
+        System.out.println("done");
+    
+        // Optionally, block for an immediate response from the server.
+        String response = in.readLine();
+        if (response != null) {
+            System.out.println("received '" + response + "' from server\n");
         }
       }
       in.close();
