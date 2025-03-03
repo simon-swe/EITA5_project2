@@ -33,10 +33,12 @@ public class server implements Runnable {
       BufferedReader in = null;
       out = new PrintWriter(socket.getOutputStream(), true);
       in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+      
       loginServer loginServer = new loginServer();
-            boolean loggedIn = loginServer.login(out, in);
+      boolean loggedIn = loginServer.login(out, in);
 
-
+      main_to_connect mtc = new main_to_connect(out, in, loginServer.getAccess());
+      mtc.program();
 
       String clientMsg = null;
       boolean checked = false;
@@ -47,7 +49,6 @@ public class server implements Runnable {
         out.println(rev);
         out.flush();
         System.out.println("done\n");
-
       }
       in.close();
       out.close();

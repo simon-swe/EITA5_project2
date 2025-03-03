@@ -8,13 +8,13 @@
 * Patient can only read files
 * Each user will have their own username and password
 */
-public class user {
+public class Access {
     private String username;
     private String type;
     private String department;
     private int access;
 
-    public user(String username, String type, String department){
+    public Access(String username, String type, String department){
         this.username = username;
         this.type = type;
         this.department = department;

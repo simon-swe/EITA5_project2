@@ -1,20 +1,26 @@
 import java.io.*;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Scanner;
 
 public class loginServer {
+    private String userName;
+    private Access access;
+    public loginServer() {
 
+    }
     public boolean login(PrintWriter out, BufferedReader in) {
         for (int i = 0; i < 3; i++) { // Allow up to 3 attempts
             try {
                 out.println("Username");
                 out.flush();
-                String userName = in.readLine();  // Read username
+                this.userName = in.readLine();  // Read username
                 out.println("Password:");
                 out.flush();
                 String password = in.readLine();  // Read password
-
                 if (authenticate(userName, password)) {
                     out.println("logged in");  // Send success message
+                    out.flush();
                     return true;  // Exit loop on successful login
                 } else {
                     out.println("Incorrect login"); // Send failure message
@@ -24,10 +30,11 @@ public class loginServer {
                 e.printStackTrace();
             }
         }
+        updateLoginTime(userName);
         return false;
     }
 
-    public static boolean authenticate(String userName, String password) {
+    public boolean authenticate(String userName, String password) {
         try (Scanner reader = new Scanner(new File("users.txt"))) {
             reader.useDelimiter(",");
             while (reader.hasNextLine()) {
@@ -38,8 +45,14 @@ public class loginServer {
                     String storedUser = credentials[0].trim();
                     String storedPass = credentials[1].trim();
 
+                    
                     if (storedUser.equals(userName) && storedPass.equals(password)) {
-                        return true; // Authentication success
+                        long lastFailedLogin = Long.parseLong(credentials[4].trim());
+                        if((System.currentTimeMillis() - lastFailedLogin) > 100000){
+                            createAccess(credentials);
+                            return true;
+                        }
+                        return false; // Authentication success
                     }
                 }
             }
@@ -48,5 +61,47 @@ public class loginServer {
             e.printStackTrace();
         }
         return false; // Authentication failed
+    }
+    public static void updateLoginTime(String userName) {
+        File file = new File("users.txt");
+        List<String> lines = new ArrayList<>();
+
+        try (Scanner reader = new Scanner(file)) {
+            while (reader.hasNextLine()) {
+                String line = reader.nextLine();
+                String[] credentials = line.split(",");
+
+                if (credentials.length >= 5) { // Ensure there's a loginTimer field
+                    String storedUser = credentials[0].trim();
+
+                    if (storedUser.equals(userName)) {
+                        credentials[4] = String.valueOf(System.currentTimeMillis()); // Update loginTimer
+                    }
+                }
+
+                lines.add(String.join(",", credentials)); // Store updated line
+            }
+        } catch (FileNotFoundException e) {
+            System.err.println("File not found: " + e.getMessage());
+            return;
+        }
+
+        // Write back the updated content
+        try (PrintWriter writer = new PrintWriter(new FileWriter(file))) {
+            for (String updatedLine : lines) {
+                writer.println(updatedLine);
+            }
+        } catch (IOException e) {
+            System.err.println("Error writing to file: " + e.getMessage());
+        }
+    }
+
+    public void createAccess(String[] credentials){
+        access = new Access(credentials[0],credentials[2],credentials[3]);
+        System.out.println(credentials[2]);
+    }
+
+    public Access getAccess() {
+        return access;
     }
 }

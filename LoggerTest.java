@@ -4,7 +4,7 @@ public class LoggerTest {
         l.log("Julius Lam", "Doctor", "Added new medicine to patient");
         l.log("Simon Swedenborg", "Government", "Read patient record");
 
-        user user1  = new user("Michael Jacksson", "Patient", "Heart");
+        Access user1  = new Access("Michael Jacksson", "Patient", "Heart");
 
 
     

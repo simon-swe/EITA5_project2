@@ -1,46 +1,66 @@
-import java.util.Scanner;
+import java.io.BufferedReader;
+import java.io.PrintWriter;
 
 public class main_to_connect {
+    private PrintWriter out;
+    private BufferedReader in;
+    private Access access;
+    private Records records;
 
-    public static void main(String[] args) {
-        login login = new login();
-        if (login.authenticate()) {
-            System.out.println("Login successful!");
+    public main_to_connect (PrintWriter out, BufferedReader in, Access access) {
+        this.out = out;
+        this.in = in;
+        this.access = access;
+        records = new Records(access);
 
-        } else {
-            System.out.println("Wrong username or password");
-        }
-        user user = new user(login.returnUser(), login.returnType(), login.returnDepartment());
-        Records records = new Records(user);
-        Scanner input = new Scanner(System.in);
-        System.out.println("What would you like to do?");
-        System.out.println("1. Get a record");
-        System.out.println("2. Create a record");
-        System.out.println("3. Delete a record");
-        int choice = input.nextInt();
-        if(choice == 1){
-            System.out.println("Enter the patient name: ");
-            String patient = input.next();
-            records.getRecord(patient);
-        }
-        else if (choice == 2){
-            System.out.println("Enter the patient name: ");
-            String patient = input.next();
-            System.out.println("Enter the doctor name: ");
-            String doctor = input.next();
-            System.out.println("Enter the nurse name: ");
-            String nurse = input.next();
-            System.out.println("Enter the department: ");
-            String department = input.next();
-            records.createRecord(patient, doctor, nurse, department);
-        }
-        else if (choice == 3){
-            System.out.println("Enter the patient name: ");
-            String patient = input.next();
-            records.deleteRecord(patient);
-        }
-        else{
-            System.out.println("Invalid choice");
+    }
+
+    public void program() {
+        out.println("What would you like to do?");
+        out.flush();
+        out.println("1. Get a record");
+        out.flush();
+        out.println("2. Create a record");
+        out.flush();
+        out.println("3. Delete a record");
+        out.flush();
+        try {
+            String c = in.readLine();
+            int choice = Integer.parseInt(c);
+            if(choice == 1){
+                out.println("Enter the patient name: ");
+                String patient = in.readLine();
+                records.getRecord(patient);
+            }
+            else if (choice == 2){
+                out.println("Enter the patient name: ");
+                out.flush();
+                String patient = in.readLine();
+                out.println("Enter the doctor name: ");
+                out.flush();
+                String doctor = in.readLine();
+                out.println("Enter the nurse name: ");
+                out.flush();
+                String nurse = in.readLine();
+                out.println("Enter the department: ");
+                out.flush();
+                String department = in.readLine();
+                records.createRecord(patient, doctor, nurse, department);
+            }
+            else if (choice == 3){
+                out.println("Enter the patient name: ");
+                out.flush();
+                String patient = in.readLine();
+                records.deleteRecord(patient);
+            }
+            else{
+                out.println("Invalid choice");
+                out.flush();
+            }
+        } catch (Exception e) {
+            System.out.println("Exception while entering String");
+            e.printStackTrace();
         }
     }
+
 }
