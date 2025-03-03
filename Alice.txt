@@ -1,0 +1,4 @@
+Patient: Alice Doctor: Sara Nurse: Daniel Department: Lungs
+
+Medical Data: 
+ada

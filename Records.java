@@ -47,10 +47,14 @@ public class Records {
         this.department = department;
         if(access == 1){
             try{
+                record = new File(patient + ".txt");
                 record.createNewFile();
                 this.writer = new PrintWriter(new FileWriter(record));
-                writer.println("Patient: " + patient + "Doctor: " + doctor + "Nurse: " + nurse + "Department: " + department);
+                writer.println("Patient: " + patient + " Doctor: " + doctor + " Nurse: " + nurse + " Department: " + department+ "\n");
+            
                 addMedicalData();
+                writer.flush();
+                writer.close();
                 logger.log(user.getUsername(), user.getType(), "CREATED NEW RECORD");
             }
             catch(IOException e){
