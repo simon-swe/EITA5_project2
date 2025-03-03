@@ -4,13 +4,12 @@ import java.util.List;
 import java.util.Scanner;
 
 public class loginServer {
-    private String userName;
     public boolean login(PrintWriter out, BufferedReader in) {
         for (int i = 0; i < 3; i++) { // Allow up to 3 attempts
             try {
                 out.println("Username");
                 out.flush();
-                this.userName = in.readLine();  // Read username
+                String userName = in.readLine();  // Read username
                 out.println("Password:");
                 out.flush();
                 String password = in.readLine();  // Read password
@@ -26,11 +25,10 @@ public class loginServer {
                 e.printStackTrace();
             }
         }
-        updateLoginTime(userName);
         return false;
     }
 
-    public static boolean authenticate(String userName, String password) {
+    public boolean authenticate(String userName, String password) {
         try (Scanner reader = new Scanner(new File("users.txt"))) {
             reader.useDelimiter(",");
             while (reader.hasNextLine()) {
@@ -40,14 +38,13 @@ public class loginServer {
                 if (credentials.length >= 2) { // Ensure at least username & password exist
                     String storedUser = credentials[0].trim();
                     String storedPass = credentials[1].trim();
-
-                    
-                    if (storedUser.equals(userName) && storedPass.equals(password)) {
-                        long lastFailedLogin = Long.parseLong(credentials[4].trim());
-                        if((System.currentTimeMillis() - lastFailedLogin) > 100000){
-                            return true;
+                    if (storedUser.equals(userName)) {
+                        long failedLoginAttempts = Long.parseLong(credentials[4].trim());
+                        if (storedPass.equals(password) && failedLoginAttempts < 5) {
+                            resetFailedAttempts(userName);
+                            return true; // Authentication successful
                         }
-                        return false; // Authentication success
+                        incrementFailedAttempts(userName);
                     }
                 }
             }
@@ -57,7 +54,7 @@ public class loginServer {
         }
         return false; // Authentication failed
     }
-    public static void updateLoginTime(String userName) {
+    public void incrementFailedAttempts(String userName) {
         File file = new File("users.txt");
         List<String> lines = new ArrayList<>();
 
@@ -66,14 +63,50 @@ public class loginServer {
                 String line = reader.nextLine();
                 String[] credentials = line.split(",");
 
-                if (credentials.length >= 5) { // Ensure there's a loginTimer field
+                if (credentials.length >= 5) { // Ensure there's a failed attempts field
                     String storedUser = credentials[0].trim();
 
                     if (storedUser.equals(userName)) {
-                        credentials[4] = String.valueOf(System.currentTimeMillis()); // Update loginTimer
+                        int failedAttempts = Integer.parseInt(credentials[4].trim()); // Read current count
+                        failedAttempts++; // Increment the failed attempts counter
+                        credentials[4] = String.valueOf(failedAttempts); // Update the field
                     }
                 }
+                lines.add(String.join(",", credentials)); // Store updated line
+            }
+        } catch (FileNotFoundException e) {
+            System.err.println("File not found: " + e.getMessage());
+            return;
+        } catch (NumberFormatException e) {
+            System.err.println("Error parsing failed attempts counter: " + e.getMessage());
+            return;
+        }
 
+        // Write back the updated content
+        try (PrintWriter writer = new PrintWriter(new FileWriter(file))) {
+            for (String updatedLine : lines) {
+                writer.println(updatedLine);
+            }
+        } catch (IOException e) {
+            System.err.println("Error writing to file: " + e.getMessage());
+        }
+    }
+
+    public void resetFailedAttempts(String userName) {
+        File file = new File("users.txt");
+        List<String> lines = new ArrayList<>();
+        try (Scanner reader = new Scanner(file)) {
+            while (reader.hasNextLine()) {
+                String line = reader.nextLine();
+                String[] credentials = line.split(",");
+
+                if (credentials.length >= 5) { // Ensure there's a failed attempts field
+                    String storedUser = credentials[0].trim();
+
+                    if (storedUser.equals(userName)) {
+                        credentials[4] = "0"; // Reset the failed attempts counter to zero
+                    }
+                }
                 lines.add(String.join(",", credentials)); // Store updated line
             }
         } catch (FileNotFoundException e) {
