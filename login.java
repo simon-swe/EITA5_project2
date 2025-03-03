@@ -30,7 +30,7 @@ public class login {
             password = input.nextLine();
 
         }
-        loginServer.authenticate(userName, password);
+        //loginServer.authenticate(userName, password);
         try (Scanner reader = new Scanner(new File("users.txt"))) {
             reader.useDelimiter(",");
             while (reader.hasNextLine()) {
