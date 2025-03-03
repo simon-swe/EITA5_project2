@@ -1,7 +1,7 @@
 import java.net.*;
 import java.io.*;
 import javax.net.ssl.*;
-import java.security.cert.X509Certificate;
+import java.util.Scanner;
 import java.util.jar.Attributes.Name;
 import java.security.KeyStore;
 import java.security.cert.*;
@@ -22,6 +22,7 @@ public class client {
     String name = null;
     for (int i = 0; i < args.length; i++) {
       System.out.println("args[" + i + "] = " + args[i]);
+
     }
     if (args.length < 1) {
       System.out.println("USAGE: java client [host] port");
@@ -53,9 +54,9 @@ public class client {
         TrustManagerFactory tmf = TrustManagerFactory.getInstance("SunX509");
         SSLContext ctx = SSLContext.getInstance("TLSv1.2");
         // keystore password (storepass)
-        ks.load(new FileInputStream("TLS_Users/" + name + "clientkeystore"), password);
+        ks.load(new FileInputStream("TLS_Users/" + name + "/clientkeystore"), password);
         // truststore password (storepass);
-        ts.load(new FileInputStream("TLS_Users/" + name + "clienttruststore"), password);
+        ts.load(new FileInputStream("TLS_Users/" + name + "/clienttruststore"), password);
         kmf.init(ks, password); // user password (keypass)
         tmf.init(ts); // keystore can be used as truststore here
         ctx.init(kmf.getKeyManagers(), tmf.getTrustManagers(), null);
@@ -87,18 +88,67 @@ public class client {
       BufferedReader read = new BufferedReader(new InputStreamReader(System.in));
       PrintWriter out = new PrintWriter(socket.getOutputStream(), true);
       BufferedReader in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
-      String msg;
-      for (;;) {
+      
+      // --- LOGIN PHASE (blocking calls) ---
+      // Wait for and display the username prompt from the server.
+      while(true){
+        System.out.println(in.readLine()); // Expecting "Username" prompt
         System.out.print(">");
-        msg = read.readLine();
-        if (msg.equalsIgnoreCase("quit")) {
+        String username = read.readLine();
+        out.println(username);
+        out.flush();
+        
+        // Wait for and display the password prompt from the server.
+        System.out.println(in.readLine()); // Expecting "Password:" prompt
+        System.out.print(">");
+        String password = read.readLine();
+        out.println(password);
+        out.flush();
+        
+        // Read the login response from the server.
+        String loginResponse = in.readLine();
+        System.out.println("Server response: " + loginResponse);
+        if (loginResponse.equalsIgnoreCase("logged in")) {
           break;
         }
-        System.out.print("sending '" + msg + "' to server...");
-        out.println(msg);
-        out.flush();
-        System.out.println("done");
-        System.out.println("received '" + in.readLine() + "' from server\n");
+      }
+      
+      // --- MAIN MESSAGE LOOP (non-blocking polling) ---
+      for (;;) {
+        // Check for any available messages/prompts from the server
+        while (in.ready()) {
+          String serverMsg = in.readLine();
+          if (serverMsg != null) {
+            System.out.println(serverMsg);
+          }
+        }
+        // Check if there's any user input
+        if (read.ready()) {
+          System.out.print(">");
+          String msg = read.readLine();
+          if (msg.equalsIgnoreCase("quit")) {
+            break;
+          }
+          System.out.print("sending '" + msg + "' to server...");
+          out.println(msg);
+          out.flush();
+          System.out.println("done");
+          
+          // Optionally, immediately check for any responses from the server
+          while (in.ready()) {
+            String response = in.readLine();
+            if (response != null) {
+              System.out.println("received '" + response + "' from server\n");
+            }
+          }
+        }
+        
+        // Small delay to avoid busy looping if no input is available.
+        try {
+          Thread.sleep(50);
+        } catch (InterruptedException e) {
+          // Handle the exception if necessary
+        }
       }
       in.close();
       out.close();
