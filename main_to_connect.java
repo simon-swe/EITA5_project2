@@ -5,13 +5,17 @@ public class main_to_connect {
     private PrintWriter out;
     private BufferedReader in;
     private Access access;
+    private Records records;
 
-    public main_to_connect (PrintWriter out, BufferedReader in, Access access){ {
-        try {
+    public main_to_connect (PrintWriter out, BufferedReader in, Access access) {
         this.out = out;
         this.in = in;
         this.access = access;
-        Records records = new Records(access);
+        records = new Records(access);
+
+    }
+
+    public void program() {
         System.out.println("What would you like to do?");
         System.out.println("1. Get a record");
         System.out.println("2. Create a record");
@@ -46,7 +50,6 @@ public class main_to_connect {
         } catch (Exception e) {
             System.out.println("Exception while entering String");
         }
-        
     }
 
 }
