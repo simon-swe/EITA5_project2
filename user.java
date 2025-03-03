@@ -13,13 +13,11 @@ public class user {
     private String type;
     private String department;
     private int access;
-    private Logger logger;
 
     public user(String username, String type, String department){
         this.username = username;
         this.type = type;
         this.department = department;
-        logger = Logger.getInstance();
         this.access = userType();
     }
     public String getUsername(){
