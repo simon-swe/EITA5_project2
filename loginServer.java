@@ -6,6 +6,7 @@ import java.util.Scanner;
 public class loginServer {
     private String userName;
     private Access access;
+    private Logger logger = Logger.getInstance();
     public loginServer() {
 
     }
@@ -21,9 +22,13 @@ public class loginServer {
                 if (authenticate(userName, password)) {
                     out.println("logged in");  // Send success message
                     out.flush();
+                    logger.log(access.getUsername(), access.getType(), "SUCCESSFULLY LOGGED IN");
+                    logger.closeLog();
                     return true;  // Exit loop on successful login
                 } else {
                     out.println("Incorrect login"); // Send failure message
+                    logger.log(userName, "NA", "ATTEMPTED LOGIN FAILED");
+                    logger.closeLog();
                 }
             } catch (IOException e) {
                 System.err.println("An error occurred while reading input.");

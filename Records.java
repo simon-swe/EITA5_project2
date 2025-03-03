@@ -28,17 +28,20 @@ public class Records {
         if ((access == 3) && (patient != user.getUsername()) || ((access == 2 || access == 1) && (department != user.getDepartment()))){
             System.out.println("You do not have permission to access this record");
             logger.log(user.getUsername(),user.getType(),"ATTEMPT TO ACCESS UNAUTHORIZED RECORD");
+            logger.closeLog();
             return null;
         }
         File record = new File(patient + ".txt");
         this.record = record;
         if(record.exists()){
             logger.log(user.getUsername(),user.getType(),"ACCESS RECORD SUCCESSFUL");
+            logger.closeLog();
             return record;
         }
         else{
             System.out.println("Record does not exist");
             logger.log(user.getUsername(),user.getType(),"ATTEMPT TO ACCESS NONEXISTIENT RECORD");
+            logger.closeLog();
             return null;
         }
     }
@@ -56,6 +59,7 @@ public class Records {
                 writer.flush();
                 writer.close();
                 logger.log(user.getUsername(), user.getType(), "CREATED NEW RECORD");
+                logger.closeLog();
             }
             catch(IOException e){
                 System.out.println("Error creating record");
@@ -64,6 +68,7 @@ public class Records {
         else{
             System.out.println("You do not have permission to create a record");
             logger.log(user.getUsername(),user.getType(),"UNAUTHORIZED ATTEMPT TO CREATE PASSWORD");
+            logger.closeLog();
         }
         
     }
@@ -78,6 +83,7 @@ public class Records {
         String data = reader.nextLine();
         writer.println(data);
         logger.log(user.getUsername(),user.getType(),"MEDICAL DATA ADDED TO RECORD");
+        logger.closeLog();
     }
 
     //Deletes a record for a patient
@@ -88,15 +94,18 @@ public class Records {
             if(record.exists()){
                 record.delete();
                 logger.log(user.getUsername(),user.getType(),"RECORD DELETED");
+                logger.closeLog();
             }
             else{
                 System.out.println("Record does not exist");
                 logger.log(user.getUsername(),user.getType(),"ATTEMPT TO RECORD NONEXISTENT RECORD");
+                logger.closeLog();
             }
         }
         else{
             System.out.println("You do not have permission to delete the record");
             logger.log(user.getUsername(), user.getType(), "UNAUTHORIZED ATTEMPT TO DELETE RECORD");
+            logger.closeLog();
         }
     }
 
@@ -108,12 +117,17 @@ public class Records {
                     System.out.println(reader.nextLine());
                 }
             }
+            
             catch(IOException e){
                 System.out.println("Error reading record");
             }
+            logger.log(user.getUsername(),user.getType(),"READ RECORD");
+            logger.closeLog();
         }
         else{
             System.out.println("Record does not exist");
+            logger.log(user.getUsername(),user.getType(),"ATTEMPT TO READ NONEXISTENT RECORD");
+            logger.closeLog();
         }
     }
 
@@ -126,9 +140,13 @@ public class Records {
             catch(IOException e){
                 System.out.println("Error writing to record");
             }
+            logger.log(user.getUsername(),user.getType(),"DATA WRITTEN TO RECORD");
+            logger.closeLog();
         }
         else{
             System.out.println("You do not have permission to write to the record");
+            logger.log(user.getUsername(),user.getType(),"UNAUTHORIZED ATTEMPT TO WRITE TO RECORD");
+            logger.closeLog();
         }
     }
 }
