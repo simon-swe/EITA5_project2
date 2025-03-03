@@ -34,10 +34,7 @@ public class server implements Runnable {
       out = new PrintWriter(socket.getOutputStream(), true);
       in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
       loginServer loginServer = new loginServer();
-            boolean loggedIn = loginServer.login(out, in);
-
-
-
+      boolean loggedIn = loginServer.login(out, in);
       String clientMsg = null;
       boolean checked = false;
       while ((clientMsg = in.readLine()) != null && loggedIn) {
@@ -47,7 +44,6 @@ public class server implements Runnable {
         out.println(rev);
         out.flush();
         System.out.println("done\n");
-
       }
       in.close();
       out.close();

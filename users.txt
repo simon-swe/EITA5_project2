@@ -1,9 +1,9 @@
-Sara,data123,Doctor,Heart,
-Henrik,heart1,Doctor,Heart,
-Daniel,lungs2,Nurse,Lungs,
-Oliver,heart2,Patient,Heart,
-Adam,data1,Nurse,Lungs,
-Alice,dat2,Patient,Lungs,
-Elsa,fatal2,Government,nA,
-Per,fatal3,Government,nA,
+Sara,data123,Doctor,Heart,0
+Henrik,heart1,Doctor,Heart,0
+Daniel,lungs2,Nurse,Lungs,0
+Oliver,heart2,Patient,Heart,0
+Adam,data1,Nurse,Lungs,1741010944528
+Alice,dat2,Patient,Lungs,0
+Elsa,fatal2,Government,nA,0
+Per,fatal3,Government,nA,0
 
