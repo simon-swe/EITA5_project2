@@ -18,9 +18,7 @@ public class Records {
     public Records(user user){
         this.user = user;
         this.department = user.getDepartment();
-        this.access = user.getAccess();
-        permissions(access);
-        
+        this.access = user.getAccess();  
     }
 
     //Gets the record for a patient
@@ -116,27 +114,6 @@ public class Records {
         }
         else{
             System.out.println("You do not have permission to write to the record");
-        }
-    }
-
-    private void permissions(int acces){
-        //Checks the permissions of the user
-        //If the user is a doctor or nurse they can read and write to the file
-        //If the user is a patient they can only read the file
-        //If the user is a government official they can read and delete the file
-        if(acces == 1){
-            record.setWritable(true);
-            record.setReadable(true);
-        }
-        else if(acces == 2){
-            record.setWritable(true);
-            record.setReadable(true);
-        }
-        else if(acces == 3){
-            record.setReadable(true);
-        }
-        else if(acces == 0){
-            record.setReadable(true);  
         }
     }
 }
