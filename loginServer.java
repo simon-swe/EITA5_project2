@@ -23,7 +23,6 @@ public class loginServer {
                     out.println("logged in");  // Send success message
                     out.flush();
                     logger.log(access.getUsername(), access.getType(), "SUCCESSFULLY LOGGED IN");
-                    logger.closeLog();
                     return true;  // Exit loop on successful login
                 } else {
                     out.println("Incorrect login"); // Send failure message
