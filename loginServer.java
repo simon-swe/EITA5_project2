@@ -27,7 +27,7 @@ public class loginServer {
                 } else {
                     out.println("Incorrect login"); // Send failure message
                     logger.log(userName, "NA", "ATTEMPTED LOGIN FAILED");
-                    logger.closeLog(); //MAYBE HAS TO BE REMOVED
+                    //logger.closeLog(); //MAYBE HAS TO BE REMOVED
                 }
             } catch (IOException e) {
                 System.err.println("An error occurred while reading input.");
