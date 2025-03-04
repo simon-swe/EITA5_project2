@@ -1,7 +1,11 @@
+import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
 import java.util.Scanner;
 /*
 Creates records for patients, associates nurses and doctors with patients and some medical data for the specific patient.
@@ -15,33 +19,48 @@ public class Records {
     private String department;
     private int access;
     private Logger logger;
-
-    public Records(Access user){
+    private PrintWriter out;
+    private BufferedReader in;
+    public Records(Access user, PrintWriter out, BufferedReader in){
         this.user = user;
         this.department = user.getDepartment();
         this.access = user.getAccess();  
         logger = Logger.getInstance();
+        this.out = out;
+        this.in = in;
     }
 
     //Gets the record for a patient
     public File getRecord(String patient){
         if ((access == 3) && (patient != user.getUsername()) || ((access == 2 || access == 1) && (department != user.getDepartment()))){
-            System.out.println("You do not have permission to access this record");
+            out.println("You do not have permission to access this record");
+            out.flush();
             logger.log(user.getUsername(),user.getType(),"ATTEMPT TO ACCESS UNAUTHORIZED RECORD");
-            logger.closeLog();
             return null;
         }
+        
         File record = new File(patient + ".txt");
         this.record = record;
         if(record.exists()){
+            StringBuilder contentBuilder = new StringBuilder();
+            try (BufferedReader br = new BufferedReader(new FileReader(record))) {
+                String line;
+                while ((line = br.readLine()) != null) {
+                    contentBuilder.append(line).append("\n");
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            String content = contentBuilder.toString();
+            out.println(content);
+            out.flush();
             logger.log(user.getUsername(),user.getType(),"ACCESS RECORD SUCCESSFUL");
-            logger.closeLog();
             return record;
         }
         else{
-            System.out.println("Record does not exist");
+            out.println("Record does not exist");
+            out.flush();
             logger.log(user.getUsername(),user.getType(),"ATTEMPT TO ACCESS NONEXISTIENT RECORD");
-            logger.closeLog();
             return null;
         }
     }
@@ -53,22 +72,19 @@ public class Records {
                 record = new File(patient + ".txt");
                 record.createNewFile();
                 this.writer = new PrintWriter(new FileWriter(record));
-                writer.println("Patient: " + patient + " Doctor: " + doctor + " Nurse: " + nurse + " Department: " + department+ "\n");
-            
+                writer.println("Patient: " + patient + "Doctor: " + doctor + "Nurse: " + nurse + "Department: " + department);
                 addMedicalData();
-                writer.flush();
-                writer.close();
                 logger.log(user.getUsername(), user.getType(), "CREATED NEW RECORD");
-                logger.closeLog();
             }
             catch(IOException e){
-                System.out.println("Error creating record");
+                out.println("Error creating record");
+                out.flush();
             }  
         }
         else{
-            System.out.println("You do not have permission to create a record");
+            out.println("You do not have permission to create a record");
+            out.flush();
             logger.log(user.getUsername(),user.getType(),"UNAUTHORIZED ATTEMPT TO CREATE PASSWORD");
-            logger.closeLog();
         }
         
     }
@@ -79,11 +95,11 @@ public class Records {
         //Adds medical data to a patient, writes to the file
         writer.println("Medical Data: ");
         reader = new Scanner(System.in);
-        System.out.println("Enter new medical data: ");
+        out.println("Enter new medical data: ");
+        out.flush();
         String data = reader.nextLine();
         writer.println(data);
         logger.log(user.getUsername(),user.getType(),"MEDICAL DATA ADDED TO RECORD");
-        logger.closeLog();
     }
 
     //Deletes a record for a patient
@@ -94,18 +110,17 @@ public class Records {
             if(record.exists()){
                 record.delete();
                 logger.log(user.getUsername(),user.getType(),"RECORD DELETED");
-                logger.closeLog();
             }
             else{
-                System.out.println("Record does not exist");
+                out.println("Record does not exist");
+                out.flush();
                 logger.log(user.getUsername(),user.getType(),"ATTEMPT TO RECORD NONEXISTENT RECORD");
-                logger.closeLog();
             }
         }
         else{
-            System.out.println("You do not have permission to delete the record");
+            out.println("You do not have permission to delete the record");
+            out.flush();
             logger.log(user.getUsername(), user.getType(), "UNAUTHORIZED ATTEMPT TO DELETE RECORD");
-            logger.closeLog();
         }
     }
 
@@ -117,17 +132,14 @@ public class Records {
                     System.out.println(reader.nextLine());
                 }
             }
-            
             catch(IOException e){
-                System.out.println("Error reading record");
+                out.println("Error reading record");
+                out.flush();
             }
-            logger.log(user.getUsername(),user.getType(),"READ RECORD");
-            logger.closeLog();
         }
         else{
-            System.out.println("Record does not exist");
-            logger.log(user.getUsername(),user.getType(),"ATTEMPT TO READ NONEXISTENT RECORD");
-            logger.closeLog();
+            out.println("Record does not exist");
+            out.flush();
         }
     }
 
@@ -138,15 +150,13 @@ public class Records {
                 addMedicalData();
             }
             catch(IOException e){
-                System.out.println("Error writing to record");
+                out.println("Error writing to record");
+                out.flush();
             }
-            logger.log(user.getUsername(),user.getType(),"DATA WRITTEN TO RECORD");
-            logger.closeLog();
         }
         else{
-            System.out.println("You do not have permission to write to the record");
-            logger.log(user.getUsername(),user.getType(),"UNAUTHORIZED ATTEMPT TO WRITE TO RECORD");
-            logger.closeLog();
+            out.println("You do not have permission to write to the record");
+            out.flush();
         }
     }
 }

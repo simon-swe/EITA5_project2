@@ -36,19 +36,18 @@ public class server implements Runnable {
       
       loginServer loginServer = new loginServer();
       boolean loggedIn = loginServer.login(out, in);
-
-      main_to_connect mtc = new main_to_connect(out, in, loginServer.getAccess());
-      mtc.program();
-
-      String clientMsg = null;
-      boolean checked = false;
-      while ((clientMsg = in.readLine()) != null && loggedIn) {
-        String rev = new StringBuilder(clientMsg).reverse().toString();
-        System.out.println("received '" + clientMsg + "' from client");
-        System.out.print("sending '" + rev + "' to client...");
-        out.println(rev);
-        out.flush();
-        System.out.println("done\n");
+      if (loggedIn){
+        main_to_connect mtc = new main_to_connect(out, in, loginServer.getAccess());
+        mtc.program();
+        String clientMsg = null;
+        while ((clientMsg = in.readLine()) != null && loggedIn) {
+          String rev = new StringBuilder(clientMsg).reverse().toString();
+          System.out.println("received '" + clientMsg + "' from client");
+          System.out.print("sending '" + rev + "' to client...");
+          out.println(rev);
+          out.flush();
+          System.out.println("done\n");
+      }
       }
       in.close();
       out.close();

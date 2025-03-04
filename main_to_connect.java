@@ -11,7 +11,7 @@ public class main_to_connect {
         this.out = out;
         this.in = in;
         this.access = access;
-        records = new Records(access);
+        records = new Records(access, out, in);
 
     }
 
@@ -25,7 +25,10 @@ public class main_to_connect {
             int choice = Integer.parseInt(c);
             if(choice == 1){
                 out.println("Enter the patient name: ");
+                out.flush();
                 String patient = in.readLine();
+                out.println("received");
+                out.flush();
                 records.getRecord(patient);
             }
             else if (choice == 2){
