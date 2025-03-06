@@ -81,6 +81,7 @@ public class Records {
                         "Patient: " + patient + "Doctor: " + doctor + "Nurse: " + nurse + "Department: " + department);
                 addMedicalData();
                 logger.log(user.getUsername(), user.getType(), "CREATED NEW RECORD");
+                logger.closeLog();
             } catch (IOException e) {
                 out.println("Error creating record");
                 out.flush();
@@ -110,7 +111,6 @@ public class Records {
             out.println("Medical data received");
             out.flush();
             logger.log(user.getUsername(), user.getType(), "MEDICAL DATA ADDED TO RECORD");
-            logger.closeLog();
         } catch (IOException e) {
             out.println("Error writing to record");
             out.flush();
