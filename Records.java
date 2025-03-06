@@ -71,7 +71,7 @@ public class Records {
     // Creates a record for a patient and associates a doctor and nurse with the
     // record
     public void createRecord(String patient, String doctor, String nurse, String department) {
-        this.department = department;
+
         if (access == 1 && department.equals(user.getDepartment())) {
             try {
                 record = new File(patient + ".txt");
