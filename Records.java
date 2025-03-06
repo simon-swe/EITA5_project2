@@ -56,14 +56,12 @@ public class Records {
             out.println(content);
             out.flush();
             logger.log(user.getUsername(),user.getType(),"ACCESS RECORD SUCCESSFUL");
-            logger.closeLog();
             return record;
         }
         else{
             out.println("Record does not exist");
             out.flush();
             logger.log(user.getUsername(),user.getType(),"ATTEMPT TO ACCESS NONEXISTIENT RECORD");
-            logger.closeLog();
             return null;
         }
     }
@@ -78,7 +76,6 @@ public class Records {
                 writer.println("Patient: " + patient + "Doctor: " + doctor + "Nurse: " + nurse + "Department: " + department);
                 addMedicalData();
                 logger.log(user.getUsername(), user.getType(), "CREATED NEW RECORD");
-                logger.closeLog();
             }
             catch(IOException e){
                 out.println("Error creating record");
@@ -89,7 +86,6 @@ public class Records {
             out.println("You do not have permission to create a record");
             out.flush();
             logger.log(user.getUsername(),user.getType(),"UNAUTHORIZED ATTEMPT TO CREATE PASSWORD");
-            logger.closeLog();
         }
         
     }
@@ -105,6 +101,7 @@ public class Records {
         String data = reader.nextLine();
         writer.println(data);
         logger.log(user.getUsername(),user.getType(),"MEDICAL DATA ADDED TO RECORD");
+        logger.closeLog();
     }
 
     //Deletes a record for a patient
@@ -115,20 +112,17 @@ public class Records {
             if(record.exists()){
                 record.delete();
                 logger.log(user.getUsername(),user.getType(),"RECORD DELETED");
-                logger.closeLog();
             }
             else{
                 out.println("Record does not exist");
                 out.flush();
                 logger.log(user.getUsername(),user.getType(),"ATTEMPT TO RECORD NONEXISTENT RECORD");
-                logger.closeLog();
             }
         }
         else{
             out.println("You do not have permission to delete the record");
             out.flush();
             logger.log(user.getUsername(), user.getType(), "UNAUTHORIZED ATTEMPT TO DELETE RECORD");
-            logger.closeLog();
         }
     }
 
