@@ -42,7 +42,6 @@ public class Records {
             logger.closeLog();
             return null;
         }
-
         File record = new File(patient + ".txt");
         this.record = record;
         if (record.exists()) {
@@ -50,7 +49,10 @@ public class Records {
             try (BufferedReader br = new BufferedReader(new FileReader(record))) {
                 String line;
                 while ((line = br.readLine()) != null) {
-                    contentBuilder.append(line).append("\n");
+                    out.println("$"); //Send this to not prompt response expectiation
+                    out.flush();
+                    out.println(line);
+                    out.flush();
                 }
             } catch (IOException e) {
                 e.printStackTrace();
@@ -72,6 +74,7 @@ public class Records {
     // record
     public void createRecord(String patient, String doctor, String nurse, String department) {
         this.department = department;
+
         if (access == 1) {
             try {
                 record = new File(patient + ".txt");
