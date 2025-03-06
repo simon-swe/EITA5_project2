@@ -32,7 +32,7 @@ public class Records {
 
     //Gets the record for a patient
     public File getRecord(String patient){
-        if ((access == 3) && (patient != user.getUsername()) || ((access == 2 || access == 1) && (department != user.getDepartment()))){
+        if ((access == 3) && (!patient.equals(user.getUsername())) || ((access == 2 || access == 1) && (!department.equals(user.getDepartment())))){
             out.println("You do not have permission to access this record");
             out.flush();
             logger.log(user.getUsername(),user.getType(),"ATTEMPT TO ACCESS UNAUTHORIZED RECORD");
