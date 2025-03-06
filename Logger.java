@@ -49,6 +49,7 @@ public class Logger {
         try {
             buffer.write(message);
             buffer.newLine();
+            buffer.flush();
         } catch (IOException e) {
             System.out.println("Failed to write to file");
             e.printStackTrace();
