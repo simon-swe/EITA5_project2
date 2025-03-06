@@ -1,4 +1,4 @@
-Sara,data123,Doctor,Heart,0
+Sara,data123,Doctor,Lungs,0
 Henrik,heart1,Doctor,Heart,0
 Daniel,lungs2,Nurse,Lungs,0
 Oliver,heart2,Patient,Heart,0
