@@ -113,26 +113,29 @@ public class client {
         }
       }
       
-      // --- MAIN MESSAGE LOOP (non-blocking polling) ---
+      // --- MAIN MESSAGE LOOP ---
       while (true) {
         // Blocking call: Wait for a message from the server.
         String serverMsg = in.readLine();
         if (serverMsg == null) { // Connection closed
             break;
         }
-        System.out.println(serverMsg);
-    
+  
         // Blocking call: Wait for user input.
-        System.out.print(">");
-        String msg = read.readLine();
-        if (msg == null || msg.equalsIgnoreCase("quit")) {
-            break;
+        
+        if(!serverMsg.equals("$")){
+          System.out.println(serverMsg);
+          System.out.print(">");
+          String msg = read.readLine();
+          if (msg == null || msg.equalsIgnoreCase("quit")) {
+              break;
+          }
+          System.out.print("sending '" + msg + "' to server...");
+          out.println(msg);
+          out.flush();
+          System.out.println("done");
         }
-        System.out.print("sending '" + msg + "' to server...");
-        out.println(msg);
-        out.flush();
-        System.out.println("done");
-    
+        
         // Optionally, block for an immediate response from the server.
         String response = in.readLine();
         if (response != null) {

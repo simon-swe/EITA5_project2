@@ -42,7 +42,6 @@ public class Records {
             logger.closeLog();
             return null;
         }
-
         File record = new File(patient + ".txt");
         this.record = record;
         if (record.exists()) {
@@ -50,7 +49,10 @@ public class Records {
             try (BufferedReader br = new BufferedReader(new FileReader(record))) {
                 String line;
                 while ((line = br.readLine()) != null) {
-                    contentBuilder.append(line).append("\n");
+                    out.println("$"); //Send this to not prompt response expectiation
+                    out.flush();
+                    out.println(line);
+                    out.flush();
                 }
             } catch (IOException e) {
                 e.printStackTrace();
@@ -71,8 +73,14 @@ public class Records {
     // Creates a record for a patient and associates a doctor and nurse with the
     // record
     public void createRecord(String patient, String doctor, String nurse, String department) {
+<<<<<<< HEAD
 
         if (access == 1 && department.equals(user.getDepartment())) {
+=======
+        this.department = department;
+
+        if (access == 1) {
+>>>>>>> Records_readFile
             try {
                 record = new File(patient + ".txt");
                 record.createNewFile();
