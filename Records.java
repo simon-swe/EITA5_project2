@@ -98,15 +98,24 @@ public class Records {
     }
 
     public void addMedicalData() {
-        // Adds medical data to a patient, writes to the file
-        writer.println("Medical Data: ");
-        reader = new Scanner(System.in);
-        out.println("Enter new medical data: ");
-        out.flush();
-        String data = "hi this is a test";// reader.nextLine();
-        writer.println(data);
-        logger.log(user.getUsername(), user.getType(), "MEDICAL DATA ADDED TO RECORD");
-        logger.closeLog();
+        try{
+            writer = new PrintWriter(new FileWriter(record, true));
+            writer.println("Medical Data: ");
+            reader = new Scanner(System.in);
+            out.println("Enter new medical data: ");
+            out.flush();
+            writer.println(in.readLine());
+            writer.flush();
+            writer.close();
+            out.println("Medical data received");
+            out.flush();
+            logger.log(user.getUsername(), user.getType(), "MEDICAL DATA ADDED TO RECORD");
+            logger.closeLog();
+        } catch (IOException e) {
+            out.println("Error writing to record");
+            out.flush();
+        }
+        
     }
 
     // Deletes a record for a patient
