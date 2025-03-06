@@ -72,7 +72,7 @@ public class Records {
     // record
     public void createRecord(String patient, String doctor, String nurse, String department) {
         this.department = department;
-        if (access == 1) {
+        if (access == 1 && department.equals(user.getDepartment())) {
             try {
                 record = new File(patient + ".txt");
                 record.createNewFile();
@@ -98,7 +98,7 @@ public class Records {
     }
 
     public void addMedicalData() {
-        try{
+        try {
             writer = new PrintWriter(new FileWriter(record, true));
             writer.println("Medical Data: ");
             reader = new Scanner(System.in);
@@ -115,7 +115,7 @@ public class Records {
             out.println("Error writing to record");
             out.flush();
         }
-        
+
     }
 
     // Deletes a record for a patient
