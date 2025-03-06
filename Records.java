@@ -86,7 +86,7 @@ public class Records {
                 out.flush();
             }
         } else {
-            out.println("You do not have permission to create a record");
+            out.println("You do not have permission to create a record, or you are not in the correct department");
             out.flush();
             logger.log(user.getUsername(), user.getType(), "UNAUTHORIZED ATTEMPT TO CREATE PASSWORD");
         }
