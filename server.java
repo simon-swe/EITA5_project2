@@ -9,7 +9,7 @@ import java.security.cert.X509Certificate;
 public class server implements Runnable {
   private ServerSocket serverSocket = null;
   private static int numConnectedClients = 0;
-  
+
   public server(ServerSocket ss) throws IOException {
     serverSocket = ss;
     newListener();
@@ -17,7 +17,7 @@ public class server implements Runnable {
 
   public void run() {
     try {
-      SSLSocket socket=(SSLSocket)serverSocket.accept();
+      SSLSocket socket = (SSLSocket) serverSocket.accept();
       newListener();
       SSLSession session = socket.getSession();
       Certificate[] cert = session.getPeerCertificates();
@@ -33,21 +33,13 @@ public class server implements Runnable {
       BufferedReader in = null;
       out = new PrintWriter(socket.getOutputStream(), true);
       in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
-      
+
       loginServer loginServer = new loginServer();
       boolean loggedIn = loginServer.login(out, in);
-      if (loggedIn){
+      if (loggedIn) {
         main_to_connect mtc = new main_to_connect(out, in, loginServer.getAccess());
         mtc.program();
-        String clientMsg = null;
-        while ((clientMsg = in.readLine()) != null && loggedIn) {
-          String rev = new StringBuilder(clientMsg).reverse().toString();
-          System.out.println("received '" + clientMsg + "' from client");
-          System.out.print("sending '" + rev + "' to client...");
-          out.println(rev);
-          out.flush();
-          System.out.println("done\n");
-      }
+
       }
       in.close();
       out.close();
@@ -61,8 +53,11 @@ public class server implements Runnable {
       return;
     }
   }
-  
-  private void newListener() { (new Thread(this)).start(); } // calls run()
+
+  private void newListener() {
+    (new Thread(this)).start();
+  } // calls run()
+
   public static void main(String args[]) {
     System.out.println("\nServer Started\n");
     int port = -1;
@@ -73,7 +68,7 @@ public class server implements Runnable {
     try {
       ServerSocketFactory ssf = getServerSocketFactory(type);
       ServerSocket ss = ssf.createServerSocket(port, 0, InetAddress.getByName(null));
-      ((SSLServerSocket)ss).setNeedClientAuth(true); // enables client authentication
+      ((SSLServerSocket) ss).setNeedClientAuth(true); // enables client authentication
       new server(ss);
     } catch (IOException e) {
       System.out.println("Unable to start Server: " + e.getMessage());
@@ -92,11 +87,11 @@ public class server implements Runnable {
         KeyStore ts = KeyStore.getInstance("JKS");
         char[] password = "password".toCharArray();
         // keystore password (storepass)
-        ks.load(new FileInputStream("TLS_server/serverkeystore"), password);  
+        ks.load(new FileInputStream("TLS_server/serverkeystore"), password);
         // truststore password (storepass)
-        ts.load(new FileInputStream("TLS_server/servertruststore"), password); 
+        ts.load(new FileInputStream("TLS_server/servertruststore"), password);
         kmf.init(ks, password); // certificate password (keypass)
-        tmf.init(ts);  // possible to use keystore as truststore here
+        tmf.init(ts); // possible to use keystore as truststore here
         ctx.init(kmf.getKeyManagers(), tmf.getTrustManagers(), null);
         ssf = ctx.getServerSocketFactory();
         return ssf;
