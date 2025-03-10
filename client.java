@@ -108,8 +108,12 @@ public class client {
         // Read the login response from the server.
         String loginResponse = in.readLine();
         System.out.println("Server response: " + loginResponse);
-        if (loginResponse.equalsIgnoreCase("logged in")) {
+  
+        if (loginResponse!=null && loginResponse.equalsIgnoreCase("logged in")) {
           break;
+        }
+        else{
+          System.out.println("Login failed");
         }
       }
       

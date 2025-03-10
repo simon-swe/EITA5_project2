@@ -39,7 +39,7 @@ public class Records {
             out.println("You do not have permission to access this record");
             out.flush();
             logger.log(user.getUsername(), user.getType(), "ATTEMPT TO ACCESS UNAUTHORIZED RECORD");
-            logger.closeLog();
+            //logger.closeLog();
             return null;
         }
         File record = new File(patient + ".txt");
@@ -73,14 +73,8 @@ public class Records {
     // Creates a record for a patient and associates a doctor and nurse with the
     // record
     public void createRecord(String patient, String doctor, String nurse, String department) {
-<<<<<<< HEAD
 
         if (access == 1 && department.equals(user.getDepartment())) {
-=======
-        this.department = department;
-
-        if (access == 1) {
->>>>>>> Records_readFile
             try {
                 record = new File(patient + ".txt");
                 record.createNewFile();
@@ -118,7 +112,7 @@ public class Records {
             out.println("Medical data received");
             out.flush();
             logger.log(user.getUsername(), user.getType(), "MEDICAL DATA ADDED TO RECORD");
-            logger.closeLog();
+            //logger.closeLog();
         } catch (IOException e) {
             out.println("Error writing to record");
             out.flush();
